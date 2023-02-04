@@ -89,3 +89,14 @@ def point_get_difference(source_point, dest_point):
     y = dest_point[1]-source_point[1]
 
     return x, y
+
+
+def round_to_multiple(number, multiple) -> int:
+    """
+    Rounds number to the nearest multiple (2, 5, 10, etc.).
+    In example, to get width/height multiple of 32, required by Yolov, Tensorflow, etc.
+    :param number: Input number.
+    :param multiple: Required multiple.
+    :return: Nearest multiple.
+    """
+    return multiple * round(number / multiple)
