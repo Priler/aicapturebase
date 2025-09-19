@@ -1,4 +1,4 @@
-import logging, os
+import logging, os, time
 
 # Import required grabber from available under utils/grabbers
 from utils.grabbers.obs_vc import Grabber
@@ -36,7 +36,7 @@ game_window_rect = resize_image_to_fit_multiply_of_32(list(game_window_rect))
 _activated = False
 
 
-def grab_process(q):
+def grab_process(q, stop_event):
     grabber = Grabber()
 
     if grabber.type == "obs_vc":
@@ -75,7 +75,7 @@ def grab_process(q):
         q.join()
 
 
-def cv2_process(q):
+def cv2_process(q, stop_event):
     global _show_cv2, game_window_rect
 
     fps = FPS()
@@ -113,9 +113,19 @@ keyboard.add_hotkey(ACTIVATION_HOTKEY, switch_shoot_state, args=('triggered', 'h
 if __name__ == "__main__":
 
     qq = multiprocessing.JoinableQueue()
+    stop_event = multiprocessing.Event()
 
-    p1 = multiprocessing.Process(target=grab_process, args=(qq,))
-    p2 = multiprocessing.Process(target=cv2_process, args=(qq,))
+    p1 = multiprocessing.Process(target=grab_process, args=(qq, stop_event))
+    p2 = multiprocessing.Process(target=cv2_process, args=(qq, stop_event))
 
     p1.start()
     p2.start()
+
+    try:
+        while True:
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        print("Stopping all processes...")
+        stop_event.set()
+        p1.join()
+        p2.join()
