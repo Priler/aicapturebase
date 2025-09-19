@@ -100,3 +100,19 @@ def round_to_multiple(number, multiple) -> int:
     :return: Nearest multiple.
     """
     return multiple * round(number / multiple)
+
+
+def resize_image_to_fit_multiply_of_32(game_window_rect):
+    # assure that width and height of capture area is multiple of 32
+    if int(game_window_rect[2]) % 32 != 0 or int(game_window_rect[3]) % 32 != 0:
+        # print("Width and/or Height of capture area must be multiple of 32")
+        # print("Width is", int(game_window_rect[2]), ", closest multiple of 32 is",
+        #       round_to_multiple(int(game_window_rect[2]), 32))
+        # print("Height is", int(game_window_rect[3]), ", closest multiple of 32 is",
+        #       round_to_multiple(int(game_window_rect[3]), 32))
+
+        game_window_rect[2] = round_to_multiple(int(game_window_rect[2]), 32)
+        game_window_rect[3] = round_to_multiple(int(game_window_rect[3]), 32)
+        # print("Width & Height was updated accordingly")
+
+    return game_window_rect

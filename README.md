@@ -8,6 +8,7 @@ Basic code template to start your new AI detection/processing project with real-
 - mss
 - screengear
 - win32
+- obs _(via virtual camera)_
 
 ## Mouse control libraries included
 - pyAutoGui
